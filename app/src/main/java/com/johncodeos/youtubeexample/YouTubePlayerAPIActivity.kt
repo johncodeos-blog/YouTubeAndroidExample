@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_youtube_player_api.*
 import com.google.android.youtube.player.*
+import android.content.pm.ActivityInfo
+
+
 
 
 class YouTubePlayerAPIActivity : AppCompatActivity(), YouTubePlayer.OnInitializedListener {
@@ -27,6 +30,7 @@ class YouTubePlayerAPIActivity : AppCompatActivity(), YouTubePlayer.OnInitialize
             youTubePlayer.cueVideo("YE7VzlLtp-4")
         }
     }
+
 
     override fun onInitializationFailure(provider: YouTubePlayer.Provider,youTubeInitializationResult: YouTubeInitializationResult) {
         if (youTubeInitializationResult.isUserRecoverableError) {
