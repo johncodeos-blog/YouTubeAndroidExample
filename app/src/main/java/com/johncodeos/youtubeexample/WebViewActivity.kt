@@ -3,7 +3,7 @@ package com.johncodeos.youtubeexample
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_web_view.*
+import android.webkit.WebView
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : AppCompatActivity() {
@@ -12,8 +12,8 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
-
-        webview_player_view.settings.javaScriptEnabled = true
-        webview_player_view.loadUrl("https://www.youtube.com/embed/YE7VzlLtp-4")
+        val webViewPlayerView = findViewById<WebView>(R.id.webview_player_view)
+        webViewPlayerView.settings.javaScriptEnabled = true
+        webViewPlayerView.loadUrl("https://www.youtube.com/embed/YE7VzlLtp-4")
     }
 }

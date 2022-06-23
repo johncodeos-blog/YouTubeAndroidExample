@@ -1,10 +1,10 @@
 package com.johncodeos.youtubeexample
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,17 +12,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        officiallibbtn.setOnClickListener {
+
+        val officialLibButton = findViewById<Button>(R.id.official_lib_button)
+        officialLibButton.setOnClickListener {
             val intent = Intent(this, YouTubePlayerAPIActivity::class.java)
             ContextCompat.startActivity(this, intent, null)
         }
 
-        thirdpartylibbtn.setOnClickListener {
+        val thirdPartyLibButton = findViewById<Button>(R.id.third_party_lib_button)
+        thirdPartyLibButton.setOnClickListener {
             val intent = Intent(this, AndroidYoutubePlayerActivity::class.java)
             ContextCompat.startActivity(this, intent, null)
         }
 
-        webviewbtn.setOnClickListener {
+        val webViewButton = findViewById<Button>(R.id.web_view_button)
+        webViewButton.setOnClickListener {
             val intent = Intent(this, WebViewActivity::class.java)
             ContextCompat.startActivity(this, intent, null)
         }

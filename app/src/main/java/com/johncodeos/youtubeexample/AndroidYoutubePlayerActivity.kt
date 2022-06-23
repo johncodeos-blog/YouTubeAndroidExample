@@ -2,43 +2,63 @@ package com.johncodeos.youtubeexample
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import kotlinx.android.synthetic.main.activity_android_youtube_player.*
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.ui.DefaultPlayerUiController
 
 class AndroidYoutubePlayerActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_android_youtube_player)
 
-        third_party_player_view.getPlayerUiController().showFullscreenButton(true)
-        third_party_player_view.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(@NonNull youTubePlayer: YouTubePlayer) {
+        val thirdPartyYouTubePlayerView =
+            findViewById<YouTubePlayerView>(R.id.third_party_player_view)
+
+        thirdPartyYouTubePlayerView.enableAutomaticInitialization =
+            false // We set it to false because we init it manually
+
+        val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                // We're using pre-made custom ui
+                val defaultPlayerUiController =
+                    DefaultPlayerUiController(thirdPartyYouTubePlayerView, youTubePlayer)
+                defaultPlayerUiController.showFullscreenButton(true)
+
+                // When the video is in full-screen, cover the entire screen
+                defaultPlayerUiController.setFullScreenButtonClickListener {
+                    if (thirdPartyYouTubePlayerView.isFullScreen()) {
+                        thirdPartyYouTubePlayerView.exitFullScreen()
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+                        // Show ActionBar
+                        if (supportActionBar != null) {
+                            supportActionBar!!.show()
+                        }
+                    } else {
+                        thirdPartyYouTubePlayerView.enterFullScreen()
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+                        // Hide ActionBar
+                        if (supportActionBar != null) {
+                            supportActionBar!!.hide()
+                        }
+                    }
+                }
+
+
+                thirdPartyYouTubePlayerView.setCustomPlayerUi(defaultPlayerUiController.rootView)
+
                 val videoId = "YE7VzlLtp-4"
                 youTubePlayer.cueVideo(videoId, 0f)
             }
-        })
+        }
 
-        third_party_player_view.getPlayerUiController().setFullScreenButtonClickListener(View.OnClickListener {
-            if (third_party_player_view.isFullScreen()) {
-                third_party_player_view.exitFullScreen()
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                // Show ActionBar
-                if (supportActionBar != null) {
-                    supportActionBar!!.show()
-                }
-            } else {
-                third_party_player_view.enterFullScreen()
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-                // Hide ActionBar
-                if (supportActionBar != null) {
-                    supportActionBar!!.hide()
-                }
-            }
-        })
+        // Disable iFrame UI
+        val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(0).build()
+        thirdPartyYouTubePlayerView.initialize(listener, options)
+
     }
 }
